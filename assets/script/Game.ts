@@ -33,23 +33,47 @@ export default class Game extends cc.Component {
     generateNewStar() {
         let newStar = cc.instantiate(this.p_starPrefab)
         this.node.addChild(newStar)
-        newStar.setPosition(this.generateRandomStarPosition())
+        let newPos=this.generateRandomStarPosition()
+        if(this.v_score>0)
+        {
+            
+        }
+        newStar.setPosition(newPos)
         newStar.getComponent("Star").game = this
     }
+    fixNewStarPositionDistance(pos:cc.Vec2){
+        let xVec=Math.random()-0.5
+        let x=xVec*(this.n_player.width+this.p_starPrefab.data.width)/2/Math.abs(xVec)
+        let yVec=Math.random()-0.5
+        let y=yVec*(this.n_player.height+this.p_starPrefab.data.height)/2/Math.abs(yVec)
+        pos.x+=x
+        pos.y+=y
+    }
+    fixNewStarPositionBrage(pos:cc.Vec2){
+        let starWith=this.p_starPrefab.data.width/2
 
+        if(pos.x+starWith>this.node.width/2)pos.x=this.node.width/2-starWith
+        if(pos.x-starWith<-this.node.width/2)pos.x=-this.node.width/2+starWith
+
+
+    }
     generateRandomStarPosition(): cc.Vec2 {
         let maxX = this.node.width / 2
-        let x = (Math.random() - 0.5) * 2 * maxX + this.p_starPrefab.data.width / 2
+        let x = (Math.random() - 0.5) * 2 * maxX
         let baseY = this.n_ground.y + this.n_ground.height / 2
         let relativeY = this.n_player.getComponent("Player").jumpHeight * Math.random() + this.p_starPrefab.data.height / 2
         let y = baseY + relativeY
-        return cc.v2(x, y)
+        let newPos=cc.v2(x, y)
+        this.fixNewStarPositionDistance(newPos)
+        this.fixNewStarPositionBrage(newPos)
+        return newPos
     }
 
     gainScore() {
         this.v_score++
         this.l_score.string = this.SCROEPREFIX + this.v_score
     }
+
 
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
