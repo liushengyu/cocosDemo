@@ -30,6 +30,7 @@ export default class NewClass extends cc.Component {
         let newStar=cc.instantiate(this.starPrefab)
         this.node.addChild(newStar)
         newStar.setPosition(this.generateRandomPosition())
+        newStar.getComponent("Star").game=this
     }
     
     generateRandomPosition():cc.Vec2{
@@ -43,12 +44,19 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.generateNewStar()
+        this.init()
     }
-
+    init(){
+       this.initStar() 
+    }
+    initStar(){
+        this.generateNewStar();
+    }
     start () {
 
     }
 
-    // update (dt) {}
+    update (dt) {
+
+    }
 }
