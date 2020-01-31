@@ -24,6 +24,9 @@ export default class Game extends cc.Component {
     @property(cc.Label)
     l_score: cc.Label = null;
 
+    @property(cc.AudioClip)
+    a_gainScoreSound:cc.AudioClip=null
+
     @property
     maxStarDuration: number = 0;
     @property
@@ -54,7 +57,6 @@ export default class Game extends cc.Component {
         let maxX = this.node.width / 2
         let x = (Math.random() - 0.5) * 2 * maxX
         let baseY = this.n_ground.y + this.n_ground.height / 2
-        console.log("")
         let relativeY = this.n_player.getComponent("Player").jumpHeight * Math.random() + this.p_starPrefab.data.height / 2
         let y = baseY + relativeY
         let newPos=cc.v2(x, y)
@@ -66,8 +68,12 @@ export default class Game extends cc.Component {
     gainScore() {
         this.v_score++
         this.l_score.string = this.SCROEPREFIX + this.v_score
+        this.playGainScoreSound()
     }
 
+    playGainScoreSound(){
+        cc.audioEngine.playEffect(this.a_gainScoreSound,false)
+    }
 
     // LIFE-CYCLE CALLBACKS:
     onLoad() {

@@ -27,12 +27,17 @@ export default class NewClass extends cc.Component {
     lAccel:boolean=false
     rAccel:boolean=false
     
+    @property(cc.AudioClip)
+    jumpSound:cc.AudioClip=null
     PlayerJumpAction(){
-        var jumpUp=cc.moveBy(this.jumpDuration,cc.v2(0,this.jumpHeight)).easing(cc.easeCubicActionOut())
-        var jumpDown=cc.moveBy(this.jumpDuration,cc.v2(0,-this.jumpHeight)).easing(cc.easeCubicActionIn())
-        return cc.repeatForever(cc.sequence(jumpUp,jumpDown))
+        let jumpUp=cc.moveBy(this.jumpDuration,cc.v2(0,this.jumpHeight)).easing(cc.easeCubicActionOut())
+        let jumpDown=cc.moveBy(this.jumpDuration,cc.v2(0,-this.jumpHeight)).easing(cc.easeCubicActionIn())
+        let onJumpSoundCallBack=cc.callFunc(this.playJumpSound,this)
+        return cc.repeatForever(cc.sequence(jumpUp,jumpDown,onJumpSoundCallBack))
     }
-
+    playJumpSound(){
+        cc.audioEngine.playEffect(this.jumpSound,false)
+    }
     onKeyDown(event:any){
         switch(event.keyCode){
             case cc.macro.KEY.a:
